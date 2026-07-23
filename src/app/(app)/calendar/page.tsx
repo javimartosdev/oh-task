@@ -1,5 +1,6 @@
 import { addDays, startOfDay, startOfWeek } from "date-fns";
 import { getCalendarBlocks, getScheduledTasks } from "@/lib/data";
+import { fetchGoogleEvents } from "@/lib/google-calendar";
 import { getSessionUser } from "@/lib/session";
 import { CalendarView } from "@/components/calendar-view";
 
@@ -10,9 +11,10 @@ export default async function CalendarPage() {
   const from = startOfWeek(startOfDay(new Date()), { weekStartsOn: 1 });
   const to = addDays(from, 21);
 
-  const [blocks, scheduledTasks] = await Promise.all([
+  const [blocks, scheduledTasks, googleEvents] = await Promise.all([
     getCalendarBlocks(user.id, from, to),
     getScheduledTasks(user.id, from, to),
+    fetchGoogleEvents(user.id, from, to).catch(() => []),
   ]);
 
   return (
@@ -33,6 +35,7 @@ export default async function CalendarPage() {
         priority: t.priority,
         status: t.status,
       }))}
+      googleEvents={googleEvents}
     />
   );
 }

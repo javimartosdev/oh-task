@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { contexts, inviteCodes, users } from "@/db/schema";
-import { DEFAULT_CONTEXTS } from "@/lib/habits";
+import { DEFAULT_LISTS } from "@/lib/lists";
 
 const registerSchema = z.object({
   name: z.string().min(2).max(80),
@@ -90,12 +90,14 @@ export async function POST(request: Request) {
     }
 
     await db.insert(contexts).values(
-      DEFAULT_CONTEXTS.map((ctx, index) => ({
+      DEFAULT_LISTS.map((list, index) => ({
         userId: user.id,
-        name: ctx.name,
-        icon: ctx.icon,
-        color: ctx.color,
+        name: list.name,
+        icon: list.icon,
+        color: list.color,
         sortOrder: index,
+        isFolder: list.isFolder,
+        parentId: null,
       })),
     );
 

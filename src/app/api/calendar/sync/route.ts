@@ -16,12 +16,16 @@ export async function GET() {
       provider: calendarConnections.provider,
       calendarId: calendarConnections.calendarId,
       connectedAt: calendarConnections.connectedAt,
+      syncToken: calendarConnections.syncToken,
     })
     .from(calendarConnections)
     .where(eq(calendarConnections.userId, user.id));
 
+  const google = rows.find((r) => r.provider === "google");
+
   return NextResponse.json({
-    connections: rows,
+    connections: rows.map(({ syncToken: _s, ...r }) => r),
+    lastGoogleSync: google?.syncToken ?? null,
     configured: {
       google: Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET),
       outlook: Boolean(

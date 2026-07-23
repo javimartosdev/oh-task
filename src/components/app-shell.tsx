@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BarChart3,
   CalendarDays,
-  CheckSquare,
+  FolderKanban,
   GanttChart,
+  Inbox,
   LayoutGrid,
+  ListTodo,
   LogOut,
   Settings,
-  Target,
+  Sun,
   Timer,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
@@ -19,13 +20,14 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/", label: "Dock", icon: Target },
-  { href: "/tasks", label: "Tasks", icon: CheckSquare },
+  { href: "/inbox", label: "Inbox", icon: Inbox },
+  { href: "/today", label: "Hoy", icon: Sun },
+  { href: "/upcoming", label: "Próximos", icon: ListTodo },
+  { href: "/lists", label: "Listas", icon: FolderKanban },
   { href: "/calendar", label: "Cal", icon: CalendarDays },
   { href: "/matrix", label: "Matrix", icon: LayoutGrid },
   { href: "/gantt", label: "Plan", icon: GanttChart },
   { href: "/focus", label: "Focus", icon: Timer },
-  { href: "/stats", label: "Stats", icon: BarChart3 },
   { href: "/settings", label: "Ajustes", icon: Settings },
 ];
 
@@ -56,8 +58,7 @@ export function AppShell({
         </div>
         <nav className="mx-auto flex max-w-5xl gap-0.5 overflow-x-auto px-2 pb-2 scrollbar-none">
           {NAV.map(({ href, label, icon: Icon }) => {
-            const active =
-              href === "/" ? pathname === "/" : pathname.startsWith(href);
+            const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
               <Link
                 key={href}

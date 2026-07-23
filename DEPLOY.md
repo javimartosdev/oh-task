@@ -1,38 +1,36 @@
-# Deploy — Vercel + Neon
+# Deploy — Oh-Task (Vercel + Neon)
 
-Guía para publicar Habit Dock en internet y usarla en el iPhone como PWA.
+Publicar **Oh-Task** (repo `javimartosdev/oh-task`). Usa una **base Neon nueva** — nunca la de Habit Dock.
 
 ## Requisitos
 
-- Cuenta en [GitHub](https://github.com) (repo: `javimartosdev/habit-dock`)
-- Cuenta en [Neon](https://neon.tech) (Postgres gratis)
-- Cuenta en [Vercel](https://vercel.com) (plan Hobby gratis)
+- GitHub: [javimartosdev/oh-task](https://github.com/javimartosdev/oh-task)
+- [Neon](https://neon.tech) — proyecto Postgres nuevo (EU)
+- [Vercel](https://vercel.com) — importar este repo
 
 ---
 
-## 1. Base de datos en Neon
+## 1. Neon
 
-1. Crea un proyecto en Neon (región EU si vives en España).
-2. Copia la **connection string** con SSL.
-3. Guárdala en `.env.production.local` (no lo subas a Git).
-4. Sincroniza el esquema:
+1. Crea proyecto Neon dedicado a Oh-Task.
+2. Copia connection string con `?sslmode=require`.
+3. Empuja el esquema:
 
 ```bash
-cd ~/Projects/01_habit-dock
-export $(grep -v '^#' .env.production.local | xargs)
-npm run db:push
+cd ~/Projects/03_oh-task
+DATABASE_URL='postgres://…?sslmode=require' npm run db:push
 ```
 
-5. (Opcional) Código de invitación:
+4. (Opcional) Invite:
 
 ```bash
-DATABASE_URL=... bash scripts/seed-invite.sh amigos
-# INVITE_ONLY=1 en Vercel si quieres cerrar el registro
+DATABASE_URL='…' bash scripts/seed-invite.sh amigos
+# En Vercel: INVITE_ONLY=1
 ```
 
 ---
 
-## 2. Secretos para producción
+## 2. Secretos Vercel
 
 ```bash
 openssl rand -base64 32
@@ -40,58 +38,51 @@ openssl rand -base64 32
 
 | Variable | Uso |
 |----------|-----|
-| `DATABASE_URL` | Neon con `?sslmode=require` |
-| `AUTH_SECRET` | Secreto de sesión |
-| `AUTH_URL` | URL pública https |
-| `INVITE_ONLY` | `1` para exigir invite |
-| `GOOGLE_*` / `OUTLOOK_*` | Sync calendarios |
-| `R2_*` | Adjuntos |
-| `STRIPE_*` | Billing Pro |
+| `DATABASE_URL` | Neon Oh-Task (no Habit Dock) |
+| `AUTH_SECRET` | Sesión |
+| `AUTH_URL` | URL https pública |
+| `INVITE_ONLY` | `1` para cerrar registro |
+| `GOOGLE_CLIENT_ID` | OAuth Google Calendar |
+| `GOOGLE_CLIENT_SECRET` | OAuth Google Calendar |
+
+### Google Calendar setup
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → APIs → habilita **Google Calendar API**
+2. Credenciales OAuth 2.0 (app web)
+3. Authorized redirect URI: `https://TU-DOMINIO/api/calendar/sync/callback`
+4. Scopes usados: `https://www.googleapis.com/auth/calendar.events`
+5. Local: `http://localhost:3000/api/calendar/sync/callback`
+
+Stripe / R2: opcionales; Pro está aparcado en la UI.
 
 ---
 
-## 3. Deploy en Vercel
+## 3. Deploy
 
-1. [vercel.com/new](https://vercel.com/new) → Import `habit-dock`
-2. Framework: Next.js
-3. Añade las env vars (Production)
-4. Deploy
-5. Actualiza `AUTH_URL` con la URL real y redeploy
-
-CLI:
+1. vercel.com/new → Import **oh-task**
+2. Framework Next.js · env vars Production
+3. Deploy → actualiza `AUTH_URL` → redeploy
 
 ```bash
 npx vercel login
 npx vercel --prod
 ```
 
-Webhook Stripe: `https://tu-app.vercel.app/api/billing/webhook`
-
 ---
 
 ## 4. Comprobar
 
-- `/register`, hábitos, tasks (NLP: `Comprar leche mañana a las 10`)
-- `/tasks`, `/calendar`, `/focus`, `/matrix`, `/gantt`, `/stats`, `/settings`
-- `/install` → PWA en iPhone (Safari)
+- `/register` (+ invite si aplica)
+- Inbox → captura NLP (`Comprar leche mañana a las 10`)
+- Hoy / Próximos / Listas (carpetas, Mover, drag)
+- Cal + Google sync en Ajustes
+- `/install` → PWA iPhone
 
 ---
 
-## 5. Actualizar
+## 5. Checklist amigo
 
-```bash
-git push origin main
-```
-
-Vercel redeploya si el repo está conectado.
-
----
-
-## Problemas frecuentes
-
-| Síntoma | Solución |
-|---------|----------|
-| Error 500 al login | `DATABASE_URL` + `db:push` en Neon |
-| Sesión no persiste | `AUTH_URL` = URL pública exacta |
-| Columnas nuevas faltan | `npm run db:push` otra vez |
-| PWA iPhone | Safari → Añadir a pantalla de inicio |
+1. Generar código en Ajustes → Invitaciones
+2. Enviar código
+3. Amigo: `/register` con email + código
+4. (Opcional) `/install` en Safari

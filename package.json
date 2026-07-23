@@ -6,7 +6,7 @@
     "dev": "next dev --webpack",
     "dev:turbo": "next dev",
     "dev:clean": "rm -rf .next && npm run dev:up",
-    "db:up": "docker start study-dock-db",
+    "db:up": "docker start oh-task-db 2>/dev/null || docker run -d --name oh-task-db -p 5434:5432 -e POSTGRES_USER=ohtask -e POSTGRES_PASSWORD=ohtask -e POSTGRES_DB=ohtask -v oh_task_pg:/var/lib/postgresql/data --restart unless-stopped postgres:16-alpine",
     "dev:up": "npm run db:up && npm run dev",
     "build": "next build",
     "start": "next start",

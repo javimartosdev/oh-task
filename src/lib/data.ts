@@ -55,6 +55,9 @@ export type TaskFilter = {
   dueFrom?: string;
   dueTo?: string;
   parentOnly?: boolean;
+  /** Tasks in Inbox list or with no list */
+  inboxOnly?: boolean;
+  excludeInbox?: boolean;
 };
 
 export async function getUserTasks(userId: string, filter: TaskFilter = {}) {
@@ -66,6 +69,25 @@ export async function getUserTasks(userId: string, filter: TaskFilter = {}) {
 
   if (filter.contextId) {
     conditions.push(eq(tasks.contextId, filter.contextId));
+  }
+
+  if (filter.inboxOnly) {
+    // null list OR list named Inbox
+    conditions.push(
+      or(
+        isNull(tasks.contextId),
+        eq(contexts.name, "Inbox"),
+      )!,
+    );
+  }
+
+  if (filter.excludeInbox) {
+    conditions.push(
+      and(
+        isNotNull(tasks.contextId),
+        sql`coalesce(${contexts.name}, '') <> 'Inbox'`,
+      )!,
+    );
   }
 
   if (filter.priority !== undefined) {

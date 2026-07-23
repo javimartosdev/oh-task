@@ -74,6 +74,20 @@ export async function DELETE(request: Request) {
   const id = new URL(request.url).searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
+  const [existing] = await db
+    .select()
+    .from(contexts)
+    .where(and(eq(contexts.id, id), eq(contexts.userId, user.id)))
+    .limit(1);
+
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (existing.name === "Inbox") {
+    return NextResponse.json(
+      { error: "No se puede borrar Inbox" },
+      { status: 400 },
+    );
+  }
+
   await db
     .delete(contexts)
     .where(and(eq(contexts.id, id), eq(contexts.userId, user.id)));

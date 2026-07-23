@@ -1,23 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito, Source_Serif_4 } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const nunito = Nunito({
+  variable: "--font-ui",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sourceSerif = Source_Serif_4({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "Oh-Task",
-  description: "Captura, organiza y enfócate — tareas, calendario y hábitos",
+  description: "Captura, organiza y enfócate — Inbox, Hoy y Próximos",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [
@@ -53,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full dark antialiased`}
+      className={`${nunito.variable} ${sourceSerif.variable} h-full dark antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans">

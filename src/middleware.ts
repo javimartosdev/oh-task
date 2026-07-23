@@ -28,7 +28,7 @@ export default auth((req) => {
   }
 
   if (isLoggedIn && isAuthPage) {
-    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/inbox", req.nextUrl.origin));
   }
 
   return NextResponse.next();

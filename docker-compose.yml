@@ -1,16 +1,16 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: study-dock-db
+    container_name: oh-task-db
     restart: unless-stopped
     ports:
-      - "5433:5432"
+      - "5434:5432"
     environment:
-      POSTGRES_USER: studydock
-      POSTGRES_PASSWORD: studydock
-      POSTGRES_DB: studydock
+      POSTGRES_USER: ohtask
+      POSTGRES_PASSWORD: ohtask
+      POSTGRES_DB: ohtask
     volumes:
-      - study_dock_pg:/var/lib/postgresql/data
+      - oh_task_pg:/var/lib/postgresql/data
 
 volumes:
-  study_dock_pg:
+  oh_task_pg:

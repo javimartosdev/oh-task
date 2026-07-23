@@ -35,6 +35,14 @@ type ScheduledTask = {
   status: string;
 };
 
+type GoogleEvent = {
+  id: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  htmlLink?: string;
+};
+
 const HOUR_START = 6;
 const HOUR_END = 22;
 const HOURS = Array.from({ length: HOUR_END - HOUR_START }, (_, i) => HOUR_START + i);
@@ -42,10 +50,12 @@ const HOURS = Array.from({ length: HOUR_END - HOUR_START }, (_, i) => HOUR_START
 export function CalendarView({
   blocks,
   scheduledTasks,
+  googleEvents = [],
   initialDate,
 }: {
   blocks: Block[];
   scheduledTasks: ScheduledTask[];
+  googleEvents?: GoogleEvent[];
   initialDate?: string;
 }) {
   const router = useRouter();
@@ -56,6 +66,7 @@ export function CalendarView({
   const [title, setTitle] = useState("");
   const [startLocal, setStartLocal] = useState("");
   const [endLocal, setEndLocal] = useState("");
+  const [pushMsg, setPushMsg] = useState("");
 
   const days = useMemo(() => {
     if (mode === "day") return [cursor];
@@ -79,11 +90,19 @@ export function CalendarView({
         title: t.title,
         start: parseISO(t.scheduledStart),
         end: parseISO(t.scheduledEnd),
-        color: "#0ea5e9",
+        color: "#89b4fa",
         kind: "task" as const,
       }));
-    return [...fromBlocks, ...fromTasks];
-  }, [blocks, scheduledTasks]);
+    const fromGoogle = googleEvents.map((g) => ({
+      id: `g-${g.id}`,
+      title: g.title,
+      start: parseISO(g.startAt.length === 10 ? `${g.startAt}T00:00:00` : g.startAt),
+      end: parseISO(g.endAt.length === 10 ? `${g.endAt}T23:59:00` : g.endAt),
+      color: "#f38ba8",
+      kind: "google" as const,
+    }));
+    return [...fromBlocks, ...fromTasks, ...fromGoogle];
+  }, [blocks, scheduledTasks, googleEvents]);
 
   function topPct(d: Date) {
     const minutes = (d.getHours() - HOUR_START) * 60 + d.getMinutes();
@@ -111,6 +130,25 @@ export function CalendarView({
     });
     setTitle("");
     router.refresh();
+  }
+
+  async function exportToGoogle() {
+    if (!title.trim() || !startLocal || !endLocal) {
+      setPushMsg("Rellena título e intervalo.");
+      return;
+    }
+    const res = await fetch("/api/calendar/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: title.trim(),
+        scheduledStart: new Date(startLocal).toISOString(),
+        scheduledEnd: new Date(endLocal).toISOString(),
+      }),
+    });
+    const data = await res.json();
+    setPushMsg(res.ok ? "Exportado a Google Calendar." : data.error ?? "Error");
+    if (res.ok) router.refresh();
   }
 
   async function removeBlock(id: string) {
@@ -173,7 +211,7 @@ export function CalendarView({
 
       <form
         onSubmit={createBlock}
-        className="grid gap-2 rounded-2xl border border-border bg-surface p-3 sm:grid-cols-4"
+        className="grid gap-2 rounded-2xl border border-border bg-mantle p-3 sm:grid-cols-4"
       >
         <Input
           value={title}
@@ -186,7 +224,7 @@ export function CalendarView({
           value={startLocal}
           onChange={(e) => setStartLocal(e.target.value)}
         />
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Input
             type="datetime-local"
             value={endLocal}
@@ -195,8 +233,15 @@ export function CalendarView({
           <Button type="submit" size="sm">
             Crear
           </Button>
+          <Button type="button" size="sm" variant="secondary" onClick={exportToGoogle}>
+            → Google
+          </Button>
         </div>
       </form>
+      {pushMsg && <p className="text-xs text-muted">{pushMsg}</p>}
+      <p className="text-[11px] text-muted">
+        Azul = tareas Oh-Task · Rosa = Google Calendar · otros = bloques locales
+      </p>
 
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
         <div

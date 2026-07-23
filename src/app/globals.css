@@ -113,14 +113,14 @@
   --color-danger: var(--danger);
   --color-selection: var(--selection);
   --color-overlay1: var(--overlay1);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
