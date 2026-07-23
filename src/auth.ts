@@ -13,6 +13,45 @@ const credentialsSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
+  // Isolate cookies from Habit Dock on localhost (cookies ignore port).
+  cookies: {
+    sessionToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-oh-task.session-token"
+          : "oh-task.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    csrfToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Host-oh-task.csrf-token"
+          : "oh-task.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    callbackUrl: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-oh-task.callback-url"
+          : "oh-task.callback-url",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   providers: [
     Credentials({
       name: "credentials",

@@ -52,7 +52,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/");
+    router.push("/inbox");
     router.refresh();
   }
 
@@ -62,7 +62,7 @@ export default function RegisterPage() {
         <div className="mb-8 flex flex-col items-center text-center">
           <BrandLogo variant="auth" className="mb-4" />
           <p className="text-sm text-muted">
-            Empieza a organizar tareas y hábitos
+            Captura. Organiza. Enfócate.
           </p>
         </div>
 

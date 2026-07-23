@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getUserContexts, getUserTasks } from "@/lib/data";
-import { ensureUserInbox, isInboxList } from "@/lib/lists";
+import { isInboxList } from "@/lib/lists";
+import { ensureUserInbox } from "@/lib/lists-server";
 import { getSessionUser } from "@/lib/session";
 import { SmartTasksView } from "@/components/smart-tasks";
 

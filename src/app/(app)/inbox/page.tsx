@@ -1,5 +1,5 @@
 import { getUserContexts, getUserTasks } from "@/lib/data";
-import { ensureUserInbox } from "@/lib/lists";
+import { ensureUserInbox } from "@/lib/lists-server";
 import { getSessionUser } from "@/lib/session";
 import { SmartTasksView } from "@/components/smart-tasks";
 
