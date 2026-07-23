@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: study-dock-db
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: studydock
+      POSTGRES_PASSWORD: studydock
+      POSTGRES_DB: studydock
+    volumes:
+      - study_dock_pg:/var/lib/postgresql/data
+
+volumes:
+  study_dock_pg:

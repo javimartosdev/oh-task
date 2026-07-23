@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+/* ── Catppuccin Latte (light) ── */
+.light {
+  --crust: #dce0e8;
+  --mantle: #e6e9ef;
+  --background: #eff1f5; /* base */
+  --foreground: #4c4f69; /* text */
+  --subtext1: #5c5f77;
+  --muted: #6c6f85; /* subtext0 */
+  --overlay2: #7c7f93;
+  --overlay1: #8c8fa1;
+  --overlay0: #9ca0b0;
+  --surface2: #acb0be;
+  --surface1: #bcc0cc;
+  --surface: #ccd0da; /* surface0 */
+  --surface-elevated: #eff1f5;
+  --surface-hover: #bcc0cc;
+  --border: #9ca0b0; /* overlay0 */
+  --accent: #1e66f5; /* blue */
+  --accent-2: #8839ef; /* mauve */
+  --accent-fg: #eff1f5; /* base on accent */
+  --lavender: #7287fd;
+  --sapphire: #209fb5;
+  --sky: #04a5e5;
+  --teal: #179299;
+  --green: #40a02b;
+  --yellow: #df8e1d;
+  --peach: #fe640b;
+  --maroon: #e64553;
+  --red: #d20f39;
+  --pink: #ea76cb;
+  --flamingo: #dd7878;
+  --rosewater: #dc8a78;
+  --success: #40a02b;
+  --warning: #df8e1d;
+  --danger: #d20f39;
+  --selection: color-mix(in oklab, #7c7f93 25%, transparent);
+}
+
+/* ── Catppuccin Mocha (dark) ── */
+.dark {
+  --crust: #11111b;
+  --mantle: #181825;
+  --background: #1e1e2e; /* base */
+  --foreground: #cdd6f4; /* text */
+  --subtext1: #bac2de;
+  --muted: #a6adc8; /* subtext0 */
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
+  --overlay0: #6c7086;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface: #313244; /* surface0 */
+  --surface-elevated: #313244;
+  --surface-hover: #45475a;
+  --border: #45475a;
+  --accent: #89b4fa; /* blue */
+  --accent-2: #cba6f7; /* mauve */
+  --accent-fg: #1e1e2e; /* base on accent */
+  --lavender: #b4befe;
+  --sapphire: #74c7ec;
+  --sky: #89dceb;
+  --teal: #94e2d5;
+  --green: #a6e3a1;
+  --yellow: #f9e2af;
+  --peach: #fab387;
+  --maroon: #eba0ac;
+  --red: #f38ba8;
+  --pink: #f5c2e7;
+  --flamingo: #f2cdcd;
+  --rosewater: #f5e0dc;
+  --success: #a6e3a1;
+  --warning: #f9e2af;
+  --danger: #f38ba8;
+  --selection: color-mix(in oklab, #9399b2 25%, transparent);
+}
+
+@theme inline {
+  --color-crust: var(--crust);
+  --color-mantle: var(--mantle);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-subtext1: var(--subtext1);
+  --color-muted: var(--muted);
+  --color-overlay0: var(--overlay0);
+  --color-overlay1: var(--overlay1);
+  --color-overlay2: var(--overlay2);
+  --color-surface: var(--surface);
+  --color-surface1: var(--surface1);
+  --color-surface2: var(--surface2);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-fg: var(--accent-fg);
+  --color-lavender: var(--lavender);
+  --color-sapphire: var(--sapphire);
+  --color-sky: var(--sky);
+  --color-teal: var(--teal);
+  --color-blue: var(--accent);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-peach: var(--peach);
+  --color-maroon: var(--maroon);
+  --color-red: var(--red);
+  --color-pink: var(--pink);
+  --color-flamingo: var(--flamingo);
+  --color-rosewater: var(--rosewater);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-selection: var(--selection);
+  --color-overlay1: var(--overlay1);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+::selection {
+  background: var(--selection);
+}
+
+/* ── Habit calendar (Catppuccin, flat) ── */
+.calendar-paper {
+  background: var(--mantle);
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+.calendar-title {
+  color: var(--foreground);
+}
+
+.calendar-subtitle {
+  color: var(--muted);
+}
+
+.calendar-weekday {
+  color: var(--overlay1);
+}
+
+.calendar-nav-btn {
+  color: var(--subtext1) !important;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--surface) !important;
+}
+
+.calendar-day {
+  background: var(--surface);
+  box-shadow: none;
+  color: var(--foreground);
+  border: 1px solid transparent;
+}
+
+.calendar-day-inactive {
+  background: transparent;
+  box-shadow: none;
+  color: var(--overlay0);
+}
+
+.calendar-day-pending {
+  background: var(--surface);
+}
+
+.calendar-day-partial {
+  background: color-mix(in oklab, var(--accent) 18%, var(--surface));
+  border-color: color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.calendar-day-optimal {
+  background: color-mix(in oklab, var(--green) 22%, var(--surface));
+  border-color: color-mix(in oklab, var(--green) 40%, transparent);
+  color: var(--green);
+}
+
+.calendar-day-optimal .cross-line,
+.calendar-day-optimal line {
+  stroke: var(--green);
+}
+
+.calendar-day-recovered {
+  background: color-mix(in oklab, var(--green) 12%, var(--surface));
+  border-color: color-mix(in oklab, var(--green) 25%, transparent);
+}
+
+.calendar-day-recovered line {
+  stroke: var(--green);
+  opacity: 0.55;
+  stroke-dasharray: 4 3;
+}
+
+.calendar-day-missed {
+  background: color-mix(in oklab, var(--red) 10%, var(--surface));
+  color: var(--overlay1);
+}
+
+.calendar-day-missed line {
+  stroke: var(--overlay0);
+  opacity: 0.7;
+}
+
+.calendar-day-today {
+  box-shadow: inset 0 0 0 2px var(--lavender);
+}
+
+.calendar-day-selected {
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    0 0 0 2px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.calendar-week-perfect {
+  position: relative;
+  background: color-mix(in oklab, var(--yellow) 22%, transparent);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--peach) 55%, transparent);
+}
+
+.calendar-week-perfect-badge {
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--peach);
+  color: var(--accent-fg);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+@keyframes week-glow {
+  0% {
+    box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--peach) 55%, transparent);
+  }
+  40% {
+    box-shadow:
+      inset 0 0 0 2px var(--peach),
+      0 0 16px color-mix(in oklab, var(--yellow) 40%, transparent);
+  }
+  100% {
+    box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--peach) 55%, transparent);
+  }
+}
+
+.animate-week-perfect {
+  animation: week-glow 0.7s ease-out;
+}
+
+@keyframes cross-off {
+  from {
+    stroke-dashoffset: 40;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes day-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-cross-off {
+  stroke-dasharray: 40;
+  animation: cross-off 0.45s ease-out forwards;
+}
+
+.cross-line {
+  stroke-dasharray: 40;
+}
+
+.animate-day-pop {
+  animation: day-pop 0.45s ease-out;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--overlay0) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lavender);
+  outline-offset: 2px;
+}
